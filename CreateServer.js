@@ -1,16 +1,21 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 
 const app = express();
 
-app.use((req, res, next) => {
-    console.log("In the middleware");
-    next();
-})
+app.use(bodyParser.urlencoded({extended: false}));
 
-app.use((req, res, next) => {
-    console.log("In the another middleware");
-    res.send('<h1>Hello from Express!</h1>');     // Content-Type: text/html; charset=utf-8
-    // res.send({key:1});                         // Content-Type: application/json; charset=utf-8
+app.use('/add-product', (req, res, next) => {
+    res.send('<form action="/product" method="POST"><input type="text" name="title"  /><input type="number" name="quantity" /> <button>Add Product</button></form>');
+});
+
+app.use('/product', (req, res, next) =>{
+    console.log(req.body);
+    res.redirect('/'); 
+}) 
+
+app.use('/', (req, res, next) => {
+    res.send('<h1>In Home page </h1>'); 
 });
 
 app.listen(4000);
@@ -54,5 +59,8 @@ Express js Task-1:-
 
 8.What does app.listen(3000) do behind the scenes ?
 -- It will create server on the port 3000
+
+What is the body parser used for?
+-- body parser is used to process the data send in an http request body from the client.
 
 */
